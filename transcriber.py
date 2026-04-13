@@ -14,11 +14,14 @@ api_key: Optional[str] = os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key=api_key)
 
 # 🎯 Config
-INPUT_FILE: str = "input.wav"
+INPUT_FILE: str = "input/input.wav"
 CHUNK_LENGTH_MS: int = 5 * 60 * 1000  # 5 minutes
 OUTPUT_FILE: str = "transcript.txt"
 
-model = genai.GenerativeModel("gemini-1.5-pro")
+# for m in genai.list_models():
+#     print(m.name, m.supported_generation_methods)
+
+model = genai.GenerativeModel("gemini-3.1-pro-preview")
 
 
 def split_audio(file_path: str, chunk_length_ms: int) -> List[str]:
@@ -42,7 +45,7 @@ def split_audio(file_path: str, chunk_length_ms: int) -> List[str]:
         end = min((i + 1) * chunk_length_ms, total_length)
 
         chunk = audio[start:end]
-        chunk_name = f"chunk_{i}.wav"
+        chunk_name = f"output/chunk_{i}.wav"
         chunk.export(chunk_name, format="wav")
         chunks.append(chunk_name)
 
